@@ -1,0 +1,172 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstring>
+#include <climits>
+#include <stdlib.h>
+//stl
+#include <deque>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <list>
+#include <map>
+#include <set>
+#include <utility>
+#include <sstream>
+#include <complex>
+#include <string>
+#include <vector>
+#include <bitset>
+//unused
+#include <complex>
+#include <functional>
+#include <fstream>
+#include <ctime>
+#include <stdexcept>
+//define
+#define MOD  1000000007
+#define INF 1<<30
+#define EPS 1e-13
+#define S(r) r*r*PI
+#define PI acos(-1.0)
+#define UP(i,x,y) for(llt i=x;i<=y;i++)
+#define MEM(a,x) memset(a,x,sizeof(a))
+
+using namespace std;
+typedef map<int,int>::iterator mii_iter;
+typedef map<int,string>::iterator mis_iter;
+typedef map<string,string>::iterator mss_iter;
+typedef map<int,vector<int> >::iterator mivi_iter;
+typedef vector<int>::iterator vi_iter;
+typedef vector<string>::iterator vs_iter;
+typedef string::iterator s_iter;
+typedef long long llt ;
+/*
+    ios.sync_with_stdio(false);  /// 那么cin, 就不能跟C的 scanf，sscanf, getchar, fgets之类的一起使用了。
+    freopen("cin.txt", "r", stdin);
+    freopen("cout.txt", "w", stdout);
+*/
+
+#define GetHash(a,b,n) ((a)*(n)+(b))
+
+const int SIZE = 30;
+int Graph[SIZE][SIZE];
+int tran[100][SIZE*SIZE][SIZE*SIZE];
+
+int count_t[2][SIZE*SIZE];
+
+void initMatrix( int n ){
+    for (int u1 = 0;u1 < n; ++u1 ){
+        for (int v1 = 0;v1 < n; ++v1 ){
+            for (int u2 = 0;u2 < n ;++u2 ){
+                for ( int v2 = 0;v2 < n;++v2 ){
+                    int vv = GetHash(v1,u1,n);
+                    int uu = GetHash(v2,u2,n);
+                    if ( u1 != u2 && v1 != v2 &&
+                         u1 != v1 && u2 != v2 &&
+                         Graph[v1][v2] &&
+                         Graph[u1][u2])
+                        tran[0][uu][vv] = 1;
+                    else
+                        tran[0][uu][vv] = 0;
+                }
+            }
+        }
+    }
+    for ( int u = 0;u < n;++u ){
+        for (int v = 0;v < n;++v ){
+            count_t[0][GetHash(u,v,n)] = 0;
+        }
+    }
+    count_t[0][GetHash(0,n-1,n)] = 1;
+}
+void build(int n){
+    int n2 = n*n;
+    for (int ti = 0;ti < 50;++ti ){
+        for (int uu = 0;uu < n2;++uu ){
+            for (int vv = 0; vv < n2  ;++vv ){
+                for (int ww = 0; ww < n2 ; ++ww ){
+                    tran[ti+1][uu][vv] = tran[ti][uu][ww]*tran[ti][ww][vv] % MOD;
+                }
+            }
+        }
+    }
+    for (int u = 0; u < n ; ++u ){
+        for (int v = 0; v < n;++v ){
+            count_t[0][GetHash(u,v,n)] = 0;
+        }
+    }
+    count_t[0][GetHash(0,n-1,n)] = 1;
+}
+void solve(int n,llt t){
+    initMatrix(n);
+    build(n);
+
+
+    int tt = t-1;
+    int ti = 0;
+    int n2 = n*n;
+    int las = 0;
+    int cur = 1;
+    while ( tt ){
+        cur = las ^ 1;
+        if ( tt & 1 ){
+            for (int uu = 0 ; uu < n2 ; ++uu ){
+                for ( int ww = 0 ; ww < n2 ;ww++ ){
+                    count_t[cur][uu] = tran[ti][ww][uu] * count_t[las][ww] % MOD;
+                }
+            }
+
+        }else{
+            for (int vv = 0; vv < n2 ; ++vv ){
+                count_t[cur][vv] = count_t[las][vv];
+            }
+        }
+        tt >>= 1;
+        ti ++;
+        las = cur ^ 1;
+
+    }
+    int ans = 0;
+    for ( int u = 0; u < n ; u++ ){
+        for ( int v = 0 ; v < n ; v++ ){
+            for ( int w = 0; w < n ;++w ){
+                int cnt = 0;
+                if ( Graph[u][w] && Graph[w][v] ){
+                    cnt++;
+                }
+                ans += cnt * tran[cur][GetHash(u,w,n)][GetHash(w,v,n)]  % MOD;
+            }
+        }
+    }
+    printf("%d\n",ans);
+
+}
+
+
+int main(){
+    int t;
+    scanf("%d",&t);
+    while( t-- ){
+        int n,m;
+        llt tt;
+        scanf("%d%d%lld",&n,&m,&tt);
+        int x,y;
+        MEM(Graph,0);
+
+        for ( int i = 0; i < m;++i ){
+            scanf("%d%d",&x,&y);
+            x--,y--;
+            Graph[x][y] = Graph[y][x] = 1;
+        }
+
+        solve(n,tt);
+    }
+
+
+    return 0;
+}
+
+
