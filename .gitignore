@@ -3,6 +3,9 @@
 *.depend
 *.layout
 
+# test files
+tmp/
+
 # Prerequisites
 *.d
 

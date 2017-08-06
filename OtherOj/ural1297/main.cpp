@@ -341,7 +341,7 @@ int querry(int A,int B){
 
 int R[SIZE],SA[SIZE];
 int Rank[SIZE],Height[SIZE];
-// 最长公共前缀
+
 int LCP( int l ,int r ){
     l = Rank[l] , r = Rank[r];
     if ( l > r )swap(l,r);
@@ -349,5 +349,44 @@ int LCP( int l ,int r ){
 }
 
 // =================== code line ==========================//
+
+char str[SIZE];
+
+int main() {
+//    readfile("in.txt");
+//    writefile("out.txt");
+    while ( scanf("%s",str) != EOF ){
+        int mid = strlen(str);
+        for (int i = 0;i < mid;++i )
+            str[mid-i+mid] = str[i];
+        str[mid] = 'z';
+        int len = mid+mid+1;
+        for (int i = 0;i < len;++i )
+            R[i] = str[i] - 'A' + 100;
+        R[len++] = '0';
+        R[mid] = 299;
+        da(R,len,399,SA);
+        calHeight(R,SA,len,Rank,Height);
+//        dispArray(SA,len);
+//        dispArray(Height,len);
+        int ans = 0;
+        int start = 0;
+        /**< 计算最长公共前缀 */
+        getRMQ(Height,len);
+
+        for (int i = 0;i < len;++i ){
+            int tmp = LCP(i,len-2-i);
+            if ( tmp*2-1 > ans ) /**< 判断奇数 */
+                ans = tmp*2-1 , start = i-tmp+1;
+            tmp = LCP(i,len-i-1);
+            if ( tmp*2 > ans )  /**< 判断偶数 */
+                ans = tmp*2 , start = i-tmp;
+        }
+        str[start+ans]=0;
+        printf("%s\n",str+start);
+    }
+    return 0;
+}
+
 
 

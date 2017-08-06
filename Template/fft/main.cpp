@@ -239,16 +239,11 @@ public:
         int i,j,big;
         bool flag;
         BigInteger t1,t2;
-        if(T<*this){
-            t1=*this;
-            t2=T;
-            flag=0;
-        }else{
-            t1=T;
-            t2=*this;
-            flag=1;
-        }
-        big=t1.len;
+        if(T<*this)
+            t1 =* this, t2 = T, flag = 0;
+        else
+            t1 = T,t2 = *this ,flag = 1;
+        big = t1.len;
         for( i=0;i < big;i++ ){
             if(t1.a[i] < t2.a[i]){
                 j=i+1;
@@ -259,10 +254,8 @@ public:
             }else t1.a[i] -= t2.a[i];
         }
         t1.len=big;
-        while(t1.a[t1.len-1]==0 && t1.len>1){
-            t1.len--;
-            big--;
-        }
+        while(t1.a[t1.len-1]==0 && t1.len>1)
+            t1.len-- , big--;
         if(flag) t1.a[big-1] = 0-t1.a[big-1];
         return t1;
     }

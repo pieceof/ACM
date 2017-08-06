@@ -35,8 +35,6 @@ struct point_t{
     double x,y;
     int id;
     point_t( int_t xx=0,int_t yy=0 ): x(xx),y(yy){};
-//    point_t( point_t const&a ): x(a.x),y(a.y) {};
-
     bool operator == (  point_t const&a )const {return dcmp(a.x-x) == 0 && dcmp(a.y-y) == 0;}
     bool operator != (  point_t const&a )const {return ! (*this == a ); }
     bool operator <  (  point_t const&a )const {return a.x != x ?  x < a.x : y < a.y;}
@@ -117,9 +115,6 @@ struct circle_t {
 };
 
 
-
-
-
 /**< 点p到线段a,b的距离 */
 int_t Point2Segment( point_t const&a,point_t const&b,point_t const&p){
     if( a == b ) return Point2Point(a,p);
@@ -192,8 +187,6 @@ bool PointInSimple( point_t * p ,int n , point_t const&po ){
     return 0;
 }
 
-
-
 /**< 点到简单多边形的距离 */
 /**< 可以优化,因为是个单峰函数 n/2 可以解决 */
 double Point2Simple( point_t * p ,int n , point_t const&po ){
@@ -220,12 +213,10 @@ inline bool SegmentOnSegment(segment_t const&u,segment_t const&v){
 inline double Segment2Segment(segment_t const&u,segment_t const&v){
     return min(min(Point2Segment(u.s,u.e,v.s),Point2Segment(u.s,u.e,v.e)),
                min(Point2Segment(v.s,v.e,u.s),Point2Segment(v.s,v.e,u.e)));
-/**< 直线是否与线段相交 */
+
 }
+/**< 直线是否与线段相交 */
 /**< 注意向量要大于0 */
-//inline bool LineOnSegment( point_t const&p,vector_t const&v,segment_t const &s ){
-//    return cross(p,p+v,s.s)*cross(p,s.e,p+v) >= 0;
-//}
 inline bool LineOnSegment( line_t const&l,segment_t const &s ){
     return cross(l.a,l.b,s.s)*cross(l.a,s.e,l.b) >= 0;
 }
@@ -256,11 +247,40 @@ int_t PolygonSideLength(point_t p[], int n){
     for (int i = 0 ;i < n-1;++i ) length += Point2Point(p[i],p[i+1]);
     return length + Point2Point(p[n-1],p[0]);
 }
+/**<  圆与直线的切线 ,返回向量的数量  */
+int LineTangentCircle(point_t const&p , circle_t const&c, vector_t *v){
+    vector_t u = c.p - p;
+    double dist = vector_length(u);
+    if ( dist < c.r )return 0;
+    else if ( dcmp(dist-c.r) == 0 ){
+        v[0] = vector_rotate(u,PI/2);
+        return 1;
+    }else {
+        double ang = asin(c.r/dist);
+        v[0] = vector_rotate(u,-ang);
+        v[1] = vector_rotate(u,+ang);
+        return 2;
+    }
+}
+
+/**< CircleIntersectArea  两个圆的面积交 */
+double CIA(circle_t const&a, circle_t const&b) {
+    double d = Point2Point( a.p,b.p );
+    if (d >= a.r + b.r)
+        return 0;
+    if (d <= fabs(a.r - b.r)) {
+        int_t r = a.r < b.r ? a.r : b.r;
+        return PI * r * r;
+    }
+    double ang1 = acos((a.r * a.r + d * d - b.r * b.r) / 2. / a.r / d);
+    double ang2 = acos((b.r * b.r + d * d - a.r * a.r) / 2. / b.r / d);
+    return ang1 * a.r * a.r + ang2 * b.r * b.r - d * a.r * sin(ang1);
+}
+
 
 
 /**< A如果比B更靠下更靠左返回真 */
 inline bool isLowLeft(point_t const&A,point_t const&B){return A.y < B.y || ( A.y == B.y && A.x < B.x );}
-
 /**< 按照对于pO的极角排序，极角相等的距离远的排在前面，因为后面要做一个unique */
 point_t* pO;
 inline bool comp4Graham(point_t const&A,point_t const&B){
@@ -276,9 +296,9 @@ inline bool comp4Graham(point_t const&A,point_t const&B){
     return a1 > a2;
 }
 
+
 /**< 相对于pO是否极角相等 */
 inline bool isEqPolar(point_t const&A,point_t const&B){return 0LL == cross(*pO,A,B);}
-
 /** \brief
  * 默认是严格凸包多边形的排序
  * 严格凸包是在极角排序的时候提前做了处理，所以我们只要把处理取反即可，
@@ -314,35 +334,7 @@ int Graham(point_t P[],int n){
     }
     return top;
 }
-/**<  圆与直线的切线 ,返回向量的数量  */
-int LineTangentCircle(point_t const&p , circle_t const&c, vector_t *v){
-    vector_t u = c.p - p;
-    double dist = vector_length(u);
-    if ( dist < c.r )return 0;
-    else if ( dcmp(dist-c.r) == 0 ){
-        v[0] = vector_rotate(u,PI/2);
-        return 1;
-    }else {
-        double ang = asin(c.r/dist);
-        v[0] = vector_rotate(u,-ang);
-        v[1] = vector_rotate(u,+ang);
-        return 2;
-    }
-}
 
-/**< CircleIntersectArea  两个圆的面积交 */
-double CIA(circle_t const&a, circle_t const&b) {
-    double d = Point2Point( a.p,b.p );
-    if (d >= a.r + b.r)
-        return 0;
-    if (d <= fabs(a.r - b.r)) {
-        int_t r = a.r < b.r ? a.r : b.r;
-        return PI * r * r;
-    }
-    double ang1 = acos((a.r * a.r + d * d - b.r * b.r) / 2. / a.r / d);
-    double ang2 = acos((b.r * b.r + d * d - a.r * a.r) / 2. / b.r / d);
-    return ang1 * a.r * a.r + ang2 * b.r * b.r - d * a.r * sin(ang1);
-}
 
 
 /**< 有向面积交,有正负 */
@@ -481,13 +473,6 @@ double DOCP( point_t *p1 ,int n1, point_t *p2,int n2 ){
     return ans;
 }
 
-/**< 两点计算 直线一般式方程 */
-void LineEquation(point_t const&a,point_t const&b ,int_t&A,int_t&B,int_t&C ){
-    assert( !(a==b) ); // assert( !(a.x==b.x));
-    A = b.y - a.y;
-    B = a.x - b.x;
-    C = b.x*a.y - a.x*b.y;
-}
 
 const int _SIZE = 8000;
 point_t _p[_SIZE];
@@ -581,6 +566,13 @@ int HPI( line_t  l[] , int n ,point_t *poly ){
 	return top - bot + 1 ;
 }
 
+/**< 两点计算 直线一般式方程 */
+void LineEquation(point_t const&a,point_t const&b ,int_t&A,int_t&B,int_t&C ){
+    assert( !(a==b) ); // assert( !(a.x==b.x));
+    A = b.y - a.y;
+    B = a.x - b.x;
+    C = b.x*a.y - a.x*b.y;
+}
 
 
 /**< 三角形外接圆  */
