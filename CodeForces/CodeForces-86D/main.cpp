@@ -9,8 +9,9 @@
 #define writefile(path) freopen( (path) , "w", stdout )
 using namespace std;
 
-int const SIZE = 30100;
-int const BLOCK_SIZE = 200;
+typedef long long llt;
+int const SIZE = 201100;
+int const BLOCK_SIZE = 250;
 
 struct mo_t{
     int s,e;
@@ -25,18 +26,22 @@ struct mo_t{
 };
 
 int n,q;
-int A[SIZE];
+llt A[SIZE];
 int const Q_SIZE = 200100;
 mo_t Mo_query[Q_SIZE];
-int Answer[Q_SIZE];
+
+llt Answer[Q_SIZE];
+
 int Cnt[1000100];
 
-int MoAns;
+llt MoAns;
 inline void insert( int n ){
-    ++ Cnt[n] == 1 ? ++MoAns:false;
+    Cnt[n]++;
+    Cnt[n] >= 1 ? MoAns += (Cnt[n]*2-1)*n :false;
 }
 inline void remove( int n ){
-    -- Cnt[n] == 0 ? --MoAns:false;
+    Cnt[n] >= 1 ? MoAns -= (Cnt[n]*2-1)*n:false;
+    Cnt[n]--;
 }
 void Mo(){
     sort(Mo_query,Mo_query+q);
@@ -49,22 +54,26 @@ void Mo(){
         while ( cur_right > Mo_query[i].e  ) remove(A[cur_right--]);
         while ( cur_left < Mo_query[i].s  ) remove(A[cur_left++]);
         Answer[Mo_query[i].idx] = MoAns;
+
     }
 }
 
-
+llt gcd(llt a,llt b){
+    return b == 0? a: gcd( b ,a%b );
+}
 int main(){
-    while ( scanf("%d",&n) != EOF ){
+    while ( scanf("%d%d",&n,&q) != EOF ){
         for (int i = 1;i <= n;++i )
-            scanf("%d",A+i);
-        scanf("%d",&q);
+            scanf("%I64d",A+i);
+//        scanf("%d",&q);
         for (int i = 0;i < q;++i ){
             scanf("%d%d",&Mo_query[i].s,&Mo_query[i].e);
             Mo_query[i].idx = i;
         }
         Mo();
         for (int i = 0;i < q;++i )
-            printf("%d\n",Answer[i]);
+            printf("%I64d\n", Answer[i] );
+
     }
     return 0;
 }

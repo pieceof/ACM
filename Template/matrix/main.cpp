@@ -11,16 +11,16 @@ using namespace std;
 
 typedef long long llt;
 const int MOD = 1000000007;
-const int Cube_SIZE = 2;///矩阵大小
+const int Cube_SIZE = 2;///戮脴脮贸麓贸脨隆
 struct Cube{
     llt mat[Cube_SIZE][Cube_SIZE];
 };
-//单位矩阵
+//鍗曚綅鐭╅樀
 Cube const _UnitCube = {
     1, 0,
     0, 1,
 };
-///矩阵乘机
+///鐭╅樀涔樻硶
 Cube _Multiply(Cube A,Cube B,llt mod){
     Cube _tmpCube;
     for (int i = 0;i < Cube_SIZE;++i)
@@ -33,8 +33,8 @@ Cube _Multiply(Cube A,Cube B,llt mod){
     }
     return _tmpCube;
 }
-///矩阵快速幂
-Cube power_Cube(Cube A,llt n,llt mod)  //矩阵快速幂
+///鐭╅樀蹇�熷箓
+Cube power_Cube(Cube A,llt n,llt mod) 
 {
     Cube _tmpCube = _UnitCube;
     while(n){
