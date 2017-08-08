@@ -22,6 +22,8 @@ char str[SIZE];
 llt r,l,k;
 
 
+
+
 bool check ( llt sum ,llt k ){
     for (int i = 0 ;i < 3;++i ){
         if ( need[i] == 0 ) continue;
@@ -47,6 +49,7 @@ bool read() {
         scanf("%I64d", have+i);
     for (int i = 0;i < 3;++i )
         scanf("%I64d", price+i);
+    scanf("%I64d",&k);
     return 1;
 }
 
@@ -55,6 +58,7 @@ int main(){
 
     while ( read() ){
         l = 0 , r = 1100000000000LL ;
+
         while ( l < r ){
             llt  mid = l + (r-l)/2;
             if ( check(mid ,k) ) l = mid+1;
