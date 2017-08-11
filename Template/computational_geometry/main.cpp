@@ -38,12 +38,13 @@ struct point_t{
     bool operator == (  point_t const&a )const {return dcmp(a.x-x) == 0 && dcmp(a.y-y) == 0;}
     bool operator != (  point_t const&a )const {return ! (*this == a ); }
     bool operator <  (  point_t const&a )const {return a.x != x ?  x < a.x : y < a.y;}
-    friend ostream &operator<<(ostream &os,const point_t &p){os << "(" << p.x << ","<< p.y << ")" << endl;return os;}
+    friend ostream &operator<<(ostream &os,const point_t &p){os << "(" << p.x << ","<< p.y << ")";return os;}
 };
 typedef point_t vector_t;
 
 vector_t operator-(  vector_t a,vector_t b ) {return point_t( a.x-b.x,a.y-b.y);}
 vector_t operator*(  vector_t a,double t ) { return point_t( a.x*t,a.y*t);}
+vector_t operator/(  vector_t a,double t ) { return point_t( a.x/t,a.y/t);}
 vector_t operator+(  vector_t a,vector_t b ) {return point_t( a.x+b.x,a.y+b.y);}
 
 struct segment_t{
@@ -197,24 +198,44 @@ double Point2Simple( point_t * p ,int n , point_t const&po ){
         ans = min( ans, Point2Segment( p[i] , p[i+1] ,po) );
     return ans;
 }
-/**< 线段相交 */
+inline double Segment2Segment(segment_t const&u,segment_t const&v){
+    return min(min(Point2Segment(u.s,u.e,v.s),Point2Segment(u.s,u.e,v.e)),
+               min(Point2Segment(v.s,v.e,u.s),Point2Segment(v.s,v.e,u.e)));
+
+}
+/**< 线段相交  严格相交 , 只要有交点就算 */
 inline bool SegmentOnSegment(segment_t const&u,segment_t const&v){
     return max(u.s.x,u.e.x) >= min(v.s.x,v.e.x)
         && max(v.s.x,v.e.x) >= min(u.s.x,u.e.x)
         && max(u.s.y,u.e.y) >= min(v.s.y,v.e.y)
         && max(v.s.y,v.e.y) >= min(u.s.y,u.e.y)
         /**< 考虑交点是端点 */
+        && cross(v.s,u.e,v.e) * cross(v.s,v.e,u.s) >= 0
+        && cross(u.s,v.e,u.e) * cross(u.s,u.e,v.s) >= 0;
+}
+/**< 线段相交, 不严格, 除非交叉,或者覆盖,否则不算相交  */
+bool SegmentOnSegmentNoStrict(segment_t s1,segment_t s2){
+    segment_t &u = s1,&v = s2;
+    /**< 先判断是否交叉  */
+    if( max(u.s.x,u.e.x) >= min(v.s.x,v.e.x)
+        && max(v.s.x,v.e.x) >= min(u.s.x,u.e.x)
+        && max(u.s.y,u.e.y) >= min(v.s.y,v.e.y)
+        && max(v.s.y,v.e.y) >= min(u.s.y,u.e.y)
+        /**< 考虑交点是端点 */
         && cross(v.s,u.e,v.e) * cross(v.s,v.e,u.s) > 0
-        && cross(u.s,v.e,u.e) * cross(u.s,u.e,v.s) > 0;
-
-//        && dcmp( cross(v.s,u.e,v.e) * cross(v.s,v.e,u.s)) > 0
-//        && dcmp( cross(u.s,v.e,u.e) * cross(u.s,u.e,v.s)) > 0;
+        && cross(u.s,v.e,u.e) * cross(u.s,u.e,v.s) > 0) return true ;
+    if ( s1.e < s1.s )swap( s1.s,s1.e );
+    if ( s2.e < s2.s )swap( s2.s,s2.e );
+    /**< 判断是否覆盖  */
+    if ( dcmp( vector_angle(s1.s-s1.e , s2.s-s2.e) ) == 0
+        && dcmp( Segment2Segment(s1,s2) ) == 0 ){
+        if ( s2.e == s1.s || s1.s == s2.e )return false;
+        return true;
+    }
+    return false;
 }
-inline double Segment2Segment(segment_t const&u,segment_t const&v){
-    return min(min(Point2Segment(u.s,u.e,v.s),Point2Segment(u.s,u.e,v.e)),
-               min(Point2Segment(v.s,v.e,u.s),Point2Segment(v.s,v.e,u.e)));
 
-}
+
 /**< 直线是否与线段相交 */
 /**< 注意向量要大于0 */
 inline bool LineOnSegment( line_t const&l,segment_t const &s ){
@@ -600,30 +621,23 @@ circle_t CircumscribedCircle(point_t p1, point_t p2, point_t p3) {
 
 /// - - - - - - - - - - - - - - - - - - Code line - - - - - - - - - - - - - - - - - - - - - - - ///
 
-//int father[SIZE];
-//void init( int n ){for (int i = 0 ;i <= n;++i) father[i] = i;}
-//int find( int x ){return father[x] == x ? x : father[x] = find( father[x] );}
-//void unite( int x,int y){father[ find(x) ] = find(y);}
-//
-const int SIZE = 200;
-point_t P[SIZE];
-int main(){
-    int i = 0;
-    while(scanf("%lf%lfd",&P[i].x,&P[i].y) != EOF)i++;
 
-    //for (int j = 0;j < i;++j)printf("%I64d %I64d\n",P[j].x,P[j].y);
-
-    pO = P;
-	sort(P+1,P+i,comp4Graham);
-	//(60,30)
-    for (int j = 0;j < i;++j)printf("(%.0fd,%.0fd)\n",P[j].x,P[j].y);
-
-	return 0;
+segment_t s[200];
+int n;
+int main() {
+//    freopen("in.txt", "r", stdin);
+//    freopen("out.txt", "w", stdout);
+//    scanf("%d",&t);
+    while(scanf("%d",&n) && n){
+//    while ( t-- ){
+//        scanf("%d",&n);
+        int ans = 0;
+        for (int i = 0;i < n;++i )scanf("%lf%lf%lf%lf",&s[i].s.x,&s[i].s.y,&s[i].e.x,&s[i].e.y);
+        for (int i = 0;i < n;++i )for (int j = i+1;j < n;++j )
+            if ( SegmentOnSegment(s[i],s[j]) )ans++;
+        Ans(ans);
+    }
+    return 0;
 }
-/*
-    ios.sync_with_stdio(false);  /// 那么cin, 就不能跟C的 scanf，sscanf, getchar, fgets之类的一起使用了。
-    freopen("cin.txt", "r", stdin);
-    freopen("cout.txt", "w", stdout);
-*/
 
 
