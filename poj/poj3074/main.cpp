@@ -3,28 +3,29 @@
 #include <cstring>
 #include <algorithm>
 #include <climits>
-#define CLEAR(a) memset((a),0,sizeof(a))
-#define FLAG(a) memset((a) , -1 , sizeof(a))
-#define  varName(x) #x
-#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-#define Case printf("Case %d:\n",kase++)
-#define Ans(x) printf("%d\n",(x))
-#define readfile(path) freopen( (path) , "r", stdin )
-#define writefile(path) freopen( (path) , "w", stdout )
+//#include <iostream>
+//#define CLEAR(a) memset((a),0,sizeof(a))
+//#define FLAG(a) memset((a) , -1 , sizeof(a))
+//#define  varName(x) #x
+//#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
+//#define Case printf("Case %d:\n",kase++)
+//#define Ans(x) printf("%d\n",(x))
+//#define readfile(path) freopen( (path) , "r", stdin )
+//#define writefile(path) freopen( (path) , "w", stdout )
 //#define deBug(x,y) cout << "(" << x << "," << y << ")" << endl;
 using namespace std;
-void ArrayCin( int *a ,int n ,int pos = 0){
-    for (int i = pos;i < n;++i ) scanf("%d",a+i);
-}
-void ArrayDisp(int *a,int n ){
-    printf("== > : ");
-    for (int i = 0;i < n;++i )printf("%4d ",a[i]);printf("\n");
-}
+//void ArrayCin( int *a ,int n ,int pos = 0){
+//    for (int i = pos;i < n;++i ) scanf("%d",a+i);
+//}
+//void ArrayDisp(int *a,int n ){
+//    printf("== > : ");
+//    for (int i = 0;i < n;++i )printf("%4d ",a[i]);printf("\n");
+//}
 
 /// ------------------------------ code line ------------------------------//
 
-int const SIZE_OF_COLS = 2010;
-int const SIZE_OF_ROWS = 2000;
+int const SIZE_OF_COLS = 1024+100;
+int const SIZE_OF_ROWS = 4096+100;
 
 /**< 十字静态链表  */
 int Up[SIZE_OF_ROWS*SIZE_OF_COLS];
@@ -58,7 +59,7 @@ void init( int rows ,int cols ){
         Left[i+1] = i;
         Right[i] = i+1;
         /**< 维护这些节点的(row,col)信息 */
-        Rth[i] = 0;
+//        Rth[i] = 0;
         Cth[i] = i;
     }
     /**< 首位相连,做成双向循环链表 */
@@ -187,23 +188,35 @@ bool dlx( int d ){
 }
 ///--------------------------- code line ------------------------------//
 
+/**< 一个小格的宽度 */
 int const subSize = 3;
+/**< 每行小格的个数 ,这里没遇到过 != subSize 所以先默认相等*/
+int const subCnt = 3;
+/**< 整个数独的宽度 */
 int const allSize = subSize*subSize;
+int mat_row[SIZE_OF_ROWS];
+int mat_col[SIZE_OF_ROWS];
+int shu[SIZE_OF_ROWS];
+int base ;
 /**< 原数独矩阵(r,c) 位置 value 为v */
 inline void _coverPos( int r,int c ,int v ){
     /**< base 为该次覆盖所在的行  */
-    int base = (r*9+c)*9+v;
+//    int base = (r*allSize+c)*allSize+v;
+    mat_row[base] = r;
+    mat_col[base] = c;
+    shu[base] = v;
+
     /**< 这一行覆盖的列有4列, 分别link */
     /**< 先link这个点所在的行 */
-    link(base, r*9 + v);
+    link(base, r*allSize + v);                              //deBug( base ,r*allSize + v );
     /**< 再link这个点所在的列 */
-    link(base, c*9 + v + 81);
+    link(base, c*allSize + v + 1*allSize*allSize );         //deBug( base ,c*allSize + v + 1*allSize*allSize );
     /**< 再link这个点所在的九宫格 */
-    int Ncnt = (r/3)*3 + c/3+1;/**<  第几个九宫格 */
-    link(base, (Ncnt-1)*9+v + 162 );
+    int Ncnt = (r/subCnt)*subCnt + c/subCnt+1; /**<  第几个九宫格 */
+    link(base, (Ncnt-1)*allSize+v + 2*allSize*allSize );     //deBug( base ,(Ncnt-1)*allSize+v + 2*allSize*allSize );
     /**< 最后link 限制 条件 9*9的每个格 都要有值 */
-    link(base, r*9+c+1 + 243 );
-
+    link(base, r*allSize+c+1 + 3*allSize*allSize );     //deBug( base ,r*allSize+c+1 + 3*allSize*allSize );
+    base++;
 }
 /** dlx 矩阵放置为
  * row 1 (1~9) 2(1~9) .......... count 81 rows
@@ -211,31 +224,40 @@ inline void _coverPos( int r,int c ,int v ){
  * nin 1 (1~9) ................. count 81 nine-grid
  * pos 1~81                      count 81 pos
  */
-void sudoku(char const mat[] ){
-
-    init( 9*9*9 ,9*9*4);
-    for (int i = 0,pos = 0;i < 9;++i ) for (int j = 0;j < 9;++j,pos++ ){
+void sudoku(char const mat[],char output [20][20] ){
+    base = 1;
+    init( allSize*allSize*allSize ,allSize*allSize*4);
+    for (int i = 0,pos = 0;i < allSize;++i ) for (int j = 0;j < allSize;++j,pos++ ){
         if ( '.' == mat[pos] )
             // 这个点尝试放置 1~9
-            for (int k = 1;k <= 9;++k )
+            for (int k = 1;k <= allSize;++k )
                 _coverPos(i,j,k);
         else
             _coverPos(i, j, mat[pos]-'0');
     }
-    dlx(0);
-    sort(AnsRows,AnsRows+ans);
-    for (int i = 0,cnt = 0;i < 9;++i ){
-        for (int j = 0;j < 9;++j )
-            printf("%d", AnsRows[cnt++]-(i*9+j)*9 );
+    int np = dlx(0);
+//    cout << np << endl;
+//    sort(AnsRows,AnsRows+ans);
+//    for (int i = 0,cnt = 0;i < allSize;++i ){
+//        for (int j = 0;j < allSize;++j )
+//            printf("%d", AnsRows[cnt++]-(j*allSize+i)*allSize );
 //        printf("\n");
+//    }
+    for (int i = 0,k = 0;i < allSize;++i ){
+        for (int j = 0;j < allSize;++j ){
+            int &a = AnsRows[k++];
+            output[ mat_row[a] ][ mat_col[a] ] = shu[a] + '0';
+        }
+        output[i][allSize] = '\0';
     }
+
 }
 
 int t,n,m,p;
 
 const int SIZE = 2000;
 char str[SIZE];
-
+char out[20][20];
 inline bool read(){
 //    if ( t-- == 0 )return false;
 
@@ -248,11 +270,15 @@ int main(){
 //    writefile("out.txt");
 //    scanf("%d",&t);while ( t-- ){
     while ( read() ){
-        sudoku(str);
+        sudoku(str,out);
+//        printf("\n");
+        for (int i = 0;i < 9;++i )
+            printf("%s",out[i]);
         printf("\n");
     }
     return 0;
 }
+
 
 
 
