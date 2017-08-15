@@ -73,6 +73,18 @@ double vector_angle( vector_t const&a,vector_t const&b ){return acos(vector_dot(
 vector_t vector_normal( vector_t const&a ){double L = vector_length(a);return vector_t( -a.y/L , a.x/L );}
 /**< 向量旋转 向量a逆时针旋转rad  */
 vector_t vector_rotate( vector_t const&a, double rad ){return vector_t( a.x*cos(rad)-a.y*sin(rad) , a.x*sin(rad)+a.y*cos(rad) );}
+/**< 点按象限角排序 */
+bool PointCmpbyAnger(const point_t &a, const point_t &b)//先按象限排序，再按极角排序，再按远近排序
+{
+    if (a.y == 0 && b.y == 0 && a.x*b.x <= 0)return a.x>b.x;
+    if (a.y == 0 && a.x >= 0 && b.y != 0)return true;
+    if (b.y == 0 && b.x >= 0 && a.y != 0)return false;
+    if (b.y*a.y <= 0)return a.y>b.y;
+    point_t ORI(0,0);
+    return cross(ORI,a,b) > 0 || (cross(ORI,a,b) == 0 && a.y > b.y);
+}
+
+
 
 struct line_t{
     point_t a,b;
