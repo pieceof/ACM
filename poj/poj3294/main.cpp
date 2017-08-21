@@ -23,19 +23,26 @@ typedef long long llt;
 using namespace std;
 
 
-int const SIZE = 305000;
-void dispArray( int const a[],int n );
+int const SIZE = 3005000;
+
+void dispArray( int const a[],int n ) {
+//    printf("this array is  ==  > ");
+    if( n < 1) puts("");
+    printf("%4d",a[0]);
+    for (int i = 1 ; i < n; ++i )printf("%3d",a[i]);
+    puts("");
+}
 
 /*
 struct node_t {
     node_t* child[30];//26个儿子
 //	int idx;//对应解释的序号
-    bool suffix;
+    bool suffix;//是否为后缀
     int cnt;
 } Node[SIZE];
 int toUsed = 1;
 
-//idx表示单词对应解释的序号
+//插入单词
 void insert(char const word[] ) {
     node_t* loc = Node;
     for(int i = 0; word[i]; ++i) {
@@ -47,7 +54,7 @@ void insert(char const word[] ) {
     loc->cnt++;
 //    loc->suffix = 1;
 }
-//查找单词，返回解释的序号，0表示未找到
+//查找单词,返回出现的次数
 int find(char const word[]) {
     node_t* loc = Node;
     for(int i = 0; word[i] ; ++i) {
@@ -87,17 +94,17 @@ void getKMPNext(DATA const P[],int *Next,int n ) {
 
 /**< 循环kmp匹配的时候要多算一位next  */
 template<class DATA >
-int KMP(DATA const T[],int tlen,DATA const P[],int plen,int Next[],int pos=0) {
+int KMP(DATA const T[],int tlen,DATA const P[],int plen,int Next[],int breakpoint=0) {
     int ans = 0;
     if ( tlen < plen ) return 0;
-    int tp = pos, pp = 0;
+    int tp = breakpoint, pp = 0;
     while( tp < tlen ) {
         if ( -1 == pp || T[tp] == P[pp] )++tp,++pp;
         else pp = Next[pp];
         if ( plen == pp  ) {
             ans++;
-            pp = 0;
-//            pp = Next[pp];
+            pp = 0;   // 不重叠
+//            pp = Next[pp]; //可以重叠
             /**< 如果不循环匹配 直接return  */
 //            return tp-plen;
         }
@@ -216,7 +223,7 @@ int MaximumRepresentation(DATA const s[],int len){
  *使用此dc3算法一定要保证r与sa的最大长度不小于3倍原长度
  *
  */
- /*
+/*
 //辅助宏，以下划线开头
 #define _F(x) ((x)/3+((x)%3==1?0:tb))
 #define _G(x) ((x)<tb?(x)*3+1:((x)-tb)*3+2)
@@ -331,8 +338,6 @@ int querry(int A,int B){
     int k = (int)(log((double)(B+1-A))/log(2.0));
     return min( _RMQ[A][k] , _RMQ[B+1-(1<<k)][k] );
 }
-// =================== code line ==========================//
-
 
 int R[SIZE],SA[SIZE];
 int Rank[SIZE],Height[SIZE];
@@ -343,76 +348,58 @@ int LCP( int l ,int r ){
     return querry(l+1,r);
 }
 
-//int SIZE = 105000;
-//char part[SIZE],tar[SIZE];
-//int EkmpNext[SIZE],extend[SIZE],Next[SIZE];
+// =================== code line ==========================//
+
 int n,t,kase = 1;
 char str[SIZE];
-//char S[SIZE],T[SIZE];
-//int tar[SIZE],part[SIZE];
-//int ans[SIZE];
-//int nub[SIZE];
 
-int pos[200];
-int chin[SIZE];
+int breakpoint[200]; /**< 记录分隔点的位置 */
+int char_in[SIZE]; /**< 记录每个字符所在的字符串序号 */
 int cnt ;
 bool vis[200];
 int k;
 int ans = 0;
+int viscnt = 0;
 
-vector <int> ans_pos;
-bool check( int len ,int mid){
+inline void TestAndSet( int i ){
+    if ( vis[i] == 0 ) vis[i] = 1,viscnt ++;
+}
+inline void clearVis(){
     CLEAR(vis);
-    int viscnt=0;
+    viscnt = 0;
+}
+
+vector <int> ans_breakpoint;
+bool check( int len ,int mid){
+    clearVis();
     for(int i = 0;i < len;++i ){
         if ( Height[i] >= mid ){
-            if ( !vis[ chin[SA[i-1]] ] ){
-                vis[chin[SA[i-1]]] = 1;
-                viscnt++;
-            }
-            if ( !vis[chin[SA[i]]] ){
-                vis[chin[SA[i]]] = 1;
-                viscnt++;
-            }
+            TestAndSet( char_in[SA[i-1]]);
+            TestAndSet( char_in[SA[i]] );
         }else {
             if ( viscnt > k/2 ) return true;
-            viscnt = 0;
-
-            CLEAR(vis);
+            clearVis();
         }
     }
     return false;
 }
 
 bool check2( int len ,int mid){
-    CLEAR(vis);
-    int viscnt=0;
+    clearVis();
     for(int i = 0;i < len;++i ){
         if ( Height[i] >= mid ){
-            if ( !vis[ chin[SA[i-1]] ] ){
-                vis[chin[SA[i-1]]] = 1;
-                viscnt++;
-            }
-            if ( !vis[chin[SA[i]]] ){
-                vis[chin[SA[i]]] = 1;
-                viscnt++;
-            }
+            TestAndSet( char_in[SA[i-1]]);
+            TestAndSet( char_in[SA[i]] );
         }else {
-            if ( viscnt > k/2 ){
-                ans_pos.push_back(SA[i-1]);
-            }
-            viscnt = 0;
-            CLEAR(vis);
+            if ( viscnt > k/2 )
+                ans_breakpoint.push_back(SA[i-1]);
+            clearVis();
         }
     }
     return false;
 }
 
 int main() {
-//    readfile("in.txt");
-//    writefile("out.txt");
-//    scanf("%d",&t);
-//    while( t-- ){
 
     while( scanf("%d",&k)!=EOF &&k ){
 
@@ -420,36 +407,27 @@ int main() {
         int len=0;scanf("%s",str+len);
         for ( int i = 1 ; i < k;++i ){
             len = strlen(str);
-            pos[cnt++] = len;
+            /**< 记录每个断点的位置 */
+            breakpoint[cnt++] = len;
             str[len] = 'a';
             scanf("%s",str+len+1);
         }
-//        dispArray(pos,cnt);
         len = strlen(str);
-//        deBug(str);
+        for (int i = 0;i < len;++i ) R[i] = str[i] - 'A' + 1;
 
-        for (int i = 0;i < len;++i ){
-            R[i] = str[i] - 'A' + 1;
+        int Insertpoint = 399;
+        breakpoint[cnt++] = len;
+        CLEAR(char_in);
+        for (int i = 0;i < cnt-1;++i ){
+            fill(char_in+breakpoint[i],char_in+breakpoint[i+1],i+1);
+            R[breakpoint[i]] = Insertpoint--;
         }
-        int tt = 399;
-        pos[cnt++] = len;
-        CLEAR(chin);
-        for (int i = 0;i < cnt-1;++i )
-        {
-            fill(chin+pos[i],chin+pos[i+1],i+1);
-            R[pos[i]] = tt--;
-        }
-//        dispArray(chin,len);
-
-
         R[len++] = 0;
-
         da(R,len,400,SA);
         calHeight(R,SA,len,Rank,Height);
-//        cout << "R : ";dispArray(R,len);
-//        cout << "SA: ";dispArray(SA,len);
-//        cout << "Ht: ";dispArray(Height,len);
+
         if ( kase++ != 1 )puts("");
+        /**< 第一遍二分找答案 */
         int l=0,r=10000;
         while( l < r ){
             int mid = l + (r-l)/2;
@@ -457,32 +435,17 @@ int main() {
             else r = mid;
         }
         l--;
-        ans_pos.clear();
+        ans_breakpoint.clear();
+        /**< 第二次check 记录这个长度的所有解 */
         check2(len,l);
-//        deBug(ans_pos.size());
-        for (int i = 0;i < ans_pos.size();++i ){
-            for (int j = 0;j < l;++j){
-                printf("%c",str[ans_pos[i]+j]);
-            }
+
+        for (int i = 0;i < ans_breakpoint.size();++i ){
+            for (int j = 0;j < l;++j)
+                putchar(str[ans_breakpoint[i]+j]);
             puts("");
         }
-        if ( ans_pos.size() <= 0 ) puts("?");
-//        deBug(l);
+        if ( ans_breakpoint.size() <= 0 ) puts("?");
     }
 
     return 0;
-}
-
-
-/*
-    ios.sync_with_stdio(false);  /// 那么cin, 就不能跟C的 scanf，sscanf, getchar, fgets之类的一起使用了。
-    freopen("cin.txt", "r", stdin);
-    freopen("cout.txt", "w", stdout);
-*/
-void dispArray( int const a[],int n ) {
-//    printf("this array is  ==  > ");
-    if( n < 1) puts("");
-    printf("%4d",a[0]);
-    for (int i = 1 ; i < n; ++i )printf("%3d",a[i]);
-    puts("");
 }
