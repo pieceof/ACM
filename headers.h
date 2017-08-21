@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <climits>
+#include <assert.h>
 #include <string>
 #include <map>
 #include <vector>
