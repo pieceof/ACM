@@ -1,26 +1,4 @@
-//#include <bits/stdc++.h>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <climits>
-//#include <iostream>
-//#define CLEAR(a) memset((a),0,sizeof(a))
-//#define FLAG(a) memset((a) , -1 , sizeof(a))
-//#define  varName(x) #x
-//#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-//#define Case printf("Case %d:\n",kase++)
-//#define Ans(x) printf("%d\n",(x))
-//#define readfile(path) freopen( (path) , "r", stdin )
-//#define writefile(path) freopen( (path) , "w", stdout )
-//#define deBug(x,y) cout << "(" << x << "," << y << ")" << endl;
-using namespace std;
-//void ArrayCin( int *a ,int n ,int pos = 0){
-//    for (int i = pos;i < n;++i ) scanf("%d",a+i);
-//}
-//void ArrayDisp(int *a,int n ){
-//    printf("== > : ");
-//    for (int i = 0;i < n;++i )printf("%4d ",a[i]);printf("\n");
-//}
+#include "../../headers.h"
 
 /// ------------------------------ code line ------------------------------//
 
