@@ -22,21 +22,26 @@
 #define readfile(path)  freopen( (path) , "r", stdin )
 #define writefile(path) freopen( (path) , "w", stdout )
 using namespace std;
-///-------------------------   math ------------------------///
 typedef long long llt;
 double const PI = acos(-1.0);
-inline double ln(double const&x ){ return log(x)/log(exp(1));}
+
+///-------------------------   math ------------------------///
+
+inline double ln(double const&x ){ return log(x)/log(exp(1.0));}
+/**< 圆锥截体 体积 输入上圆半径r1, 下圆半径r2 ,高h */
 inline double Vfrustum( double const&r1,double const&r2,double const&h ){
     return PI * h * ( r1*r1 + r2*r2 + r1*r2 )/3;
 }
-
+/**< 海伦公式 ,已知三角形三边求面积 */
+inline double Heron( double a,double b,double c ){
+    double _p = (a+b+c)/2.0;
+    return sqrt( _p*(_p-a)*(_p-b)*(_p-c) );
+}
 
 ///----------------------- debug tools ---------------------///
 
 template <typename T>
-void ArrayCin( T *a ,int n ,int pos = 0){
-    for (int i = pos;i < n;++i ) cin>>a[i];
-}
+void ArrayCin( T *a ,int n ,int pos = 0){ for (int i = pos;i < n;++i ) cin>>a[i];}
 
 template <typename T>
 void ArrayDisp(T *a,int n ){
