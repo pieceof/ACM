@@ -5,6 +5,7 @@
 
 # test files
 tmp/
+cache/
 
 # Prerequisites
 *.d
