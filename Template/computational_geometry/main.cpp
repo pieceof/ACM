@@ -1,33 +1,9 @@
-#include <cstdio>
-#include <cmath>
-#include <climits>
-#include <iostream>
-#include <algorithm>
-#include <assert.h>
-#include <vector>
-#include <map>
-#include <cstdlib>
-#include <cstring>
-#define CLEAR(a) memset((a),0,sizeof(a))
-#define FLAG(a) memset((a) , -1 , sizeof(a))
-#define  varName(x) #x
-#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-#define Case printf("Case #%d: ",kase++)
-#define Ans(x) printf("%d\n",(x))
-#define Anslld(x) printf("%lld\n",(x))
-#define readfile(path) freopen( (path) , "r", stdin )
-#define writefile(path) freopen( (path) , "w", stdout )
-using namespace std;
-void dispArray( int const a[],int n ) {
-//    printf("this array is  ==  > ");
-    if( n < 1) puts("");printf("%4d",a[0]);
-    for (int i = 1 ; i < n; ++i )printf("%3d",a[i]);puts("");
-}
+#include "../../headers.h"
 
 typedef double int_t;
-double const eps = 1e-6;
-double const PI = acos(-1.0);
-inline int dcmp(double x){if(x > eps) return 1;return x < -eps ? -1 : 0;}
+long double const eps = 1e-9;
+
+inline int dcmp( long double x){if(x > eps) return 1;return x < -eps ? -1 : 0;}
 inline double toRad( double angle ){ return (angle/180*PI);}
 inline int quadrant(int_t x,int_t y){if ( y >= 0 ) return x > 0 ? 0 : 1;return x <= 0 ? 2 : 3;}
 
@@ -40,6 +16,7 @@ struct point_t{
     bool operator <  (  point_t const&a )const {return a.x != x ?  x < a.x : y < a.y;}
     friend ostream &operator<<(ostream &os,const point_t &p){os << "(" << p.x << ","<< p.y << ")";return os;}
 };
+const point_t PO(0,0);
 typedef point_t vector_t;
 
 vector_t operator-(  vector_t a,vector_t b ) {return point_t( a.x-b.x,a.y-b.y);}
@@ -57,25 +34,31 @@ struct segment_t{
 };
 
 /**< 叉积 oa * ob */
-inline int_t cross(point_t const &O,point_t const &A,point_t const &B){return (A.x - O.x) * (B.y - O.y) - (B.x - O.x) * (A.y - O.y);}
+inline int_t cross(point_t const &O,point_t const &A,point_t const &B){
+    return (A.x - O.x) * (B.y - O.y) - (B.x - O.x) * (A.y - O.y);}
 /**< 点到点的距离 */
-inline int_t Point2Point(point_t const &a, point_t const &b) {return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));}
+inline int_t Point2Point(point_t const &a, point_t const &b) {
+    return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));}
 /**< 线段的中点 */
-inline point_t SegmentMid(point_t const &a, point_t const &b) {return point_t ( (a.x+b.x)/2.0 , (a.y+b.y)/2.0 );}
+inline point_t SegmentMid(point_t const &a, point_t const &b) {
+    return point_t ( (a.x+b.x)/2.0 , (a.y+b.y)/2.0 );}
 /**< 向量的点积 */
 double vector_dot ( vector_t const&a,vector_t const&b ){return a.x*b.x + a.y*b.y;}
 /**< 向量的长度 */
 double vector_length( vector_t const&a ){return sqrt(vector_dot(a,a));}
 /**< 向量的夹角 */
-double vector_angle( vector_t const&a,vector_t const&b ){return acos(vector_dot(a,b)/vector_length(a)/vector_length(b));}
-
+double vector_angle( vector_t const&a,vector_t const&b ){
+    double x = vector_dot(a,b)/vector_length(a)/vector_length(b);
+    if ( x > 1.0 ) x = 1.0;if ( x < -1.0) x = -1.0;return acos(x);}
 /**< 向量的法线 输入要保证不是零向量 */
 vector_t vector_normal( vector_t const&a ){double L = vector_length(a);return vector_t( -a.y/L , a.x/L );}
 /**< 向量旋转 向量a逆时针旋转rad  */
-vector_t vector_rotate( vector_t const&a, double rad ){return vector_t( a.x*cos(rad)-a.y*sin(rad) , a.x*sin(rad)+a.y*cos(rad) );}
+vector_t vector_rotate( vector_t const&a, double rad ){
+    return vector_t( a.x*cos(rad)-a.y*sin(rad) , a.x*sin(rad)+a.y*cos(rad) );}
 /**< 点按象限角排序 */
-bool PointCmpbyAnger(const point_t &a, const point_t &b)//先按象限排序，再按极角排序，再按远近排序
-{
+
+/**<  先按象限排序，再按极角排序，再按远近排序 */
+bool PointCmpbyAnger(const point_t &a, const point_t &b){
     if (a.y == 0 && b.y == 0 && a.x*b.x <= 0)return a.x>b.x;
     if (a.y == 0 && a.x >= 0 && b.y != 0)return true;
     if (b.y == 0 && b.x >= 0 && a.y != 0)return false;
@@ -83,8 +66,6 @@ bool PointCmpbyAnger(const point_t &a, const point_t &b)//先按象限排序，再按极角
     point_t ORI(0,0);
     return cross(ORI,a,b) > 0 || (cross(ORI,a,b) == 0 && a.y > b.y);
 }
-
-
 
 struct line_t{
     point_t a,b;
@@ -136,12 +117,17 @@ int_t Point2Segment( point_t const&a,point_t const&b,point_t const&p){
     else if ( dcmp( vector_dot(v1,v3)) > 0 ) return vector_length(v3);
     return fabs( cross( a, b, p ) ) / vector_length(v1);
 }
-
+/**< 直线平行 */
+bool LineParaLine( line_t const &l1,line_t const&l2 ){
+    return dcmp( cross( PO, l1.b-l1.a , l2.b-l2.a ) ) == 0 ;}
+/**< 直线垂直 */
+bool LineVertLine( line_t const &l1,line_t const&l2 ){
+    return dcmp(vector_angle( l1.a-l1.b,l2.a-l2.b ) - PI/2 ) == 0 ;}
 
 /**< 点到直线的距离 */
 int_t Point2Line( point_t const&p, line_t const&l){
     vector_t v1 = l.b-l.a,v2 = p-l.a;
-    return fabs(cross(point_t(0,0),v1,v2)) / vector_length(v1) ;
+    return fabs(cross(point_t(0,0),v1,v2)) / vector_length(v1);
 }
 
 bool isConvexPolygon( point_t*p,int n,int &shunxu ){
@@ -382,8 +368,8 @@ int_t CPIA(point_t a[], point_t b[], int na, int nb){
         for(int j = tn = 0; j < nb; j++, sflag = eflag){
             if(sflag>=0) tmp[tn++] = p[j];
             eflag = dcmp(cross(a[i],a[i + 1], p[j + 1]));
-            if((sflag ^ eflag) == -2)
-                tmp[tn++] = lineCrossline( line_t( a[i], a[i + 1]),line_t(p[j], p[j + 1]) ); ///求交点
+            if((sflag ^ eflag) == -2) /**<  求交点 */
+                tmp[tn++] = lineCrossline( line_t( a[i], a[i + 1]),line_t(p[j], p[j + 1]) );
         }
         memcpy(p, tmp, sizeof(point_t) * tn);
         nb = tn, p[nb] = p[0];
@@ -394,19 +380,16 @@ int_t CPIA(point_t a[], point_t b[], int na, int nb){
 
 /**< 有向面积交,有正负 */
 /**< SimplePolygonIntersectArea 调用此函数 */
-int_t SPIA(point_t a[], point_t b[], int na, int nb)
-{
+int_t SPIA(point_t a[], point_t b[], int na, int nb){
     int i, j;
     point_t t1[4], t2[4];
     int_t res = 0, num1, num2;
     a[na] = t1[0] = a[0], b[nb] = t2[0] = b[0];
-    for(i = 2; i < na; i++)
-    {
+    for(i = 2; i < na; i++) {
         t1[1] = a[i-1], t1[2] = a[i];
         num1 = dcmp(cross(t1[0],t1[1], t1[2]));
         if(num1 < 0) swap(t1[1], t1[2]);
-        for(j = 2; j < nb; j++)
-        {
+        for(j = 2; j < nb; j++){
             t2[1] = b[j - 1], t2[2] = b[j];
             num2 = dcmp(cross(t2[0],t2[1], t2[2]));
             if(num2 < 0) swap(t2[1], t2[2]);
@@ -426,9 +409,7 @@ double Rotating_calipers( point_t *p ,int n ){
     for (int i = 0 ;i < n;++i ){
         while ( fabs(TriangleArea(p[i],p[i+1],p[q+1])) > fabs(TriangleArea(p[i],p[i+1],p[q] )) )
             q = (q+1) % n;
-//            deBug(p[i]);deBug(p[q]);
-//            deBug(p[i+1]);deBug(p[q+1]);
-            ans = max( ans ,max( Point2Point(p[i],p[q]), Point2Point(p[i+1],p[q+1]) ) );
+        ans = max( ans ,max( Point2Point(p[i],p[q]), Point2Point(p[i+1],p[q+1]) ) );
     }
     return ans;
 }
@@ -450,7 +431,7 @@ double  max_TriangleArea( point_t *p,int n ){
 
 /**< 两个凸包的最近距离 */
 void _getTOP_DOWN( point_t *p1 ,int n1,int &l, point_t *p2,int n2,int &r ){
-    l=r=0;
+    l = r = 0;
     for( int i=0;i<n1;i++ )
         if((dcmp(p1[i].y-p1[l].y))<0) l = i;
     for( int i=0;i<n2;i++ )
@@ -548,10 +529,10 @@ int HalfplaneIntersection( line_t const l[] , int n ,point_t *poly ){
  * 在输入的边上进行修改
  * 判断存在的时候 n > 2
  */
-
+/**< 这个是半平面平行 */
 bool isParallel( line_t const&a,line_t const&b ){return dcmp(a.angle-b.angle) == 0;}
 int HPI( line_t  l[] , int n ,point_t *poly ){
-    sort( l , l+n);
+    sort( l , l+n );
     //完全平行的半平面只取一个
     n = unique(l,l+n,isParallel) - l;
     int bot = 0;
@@ -588,14 +569,9 @@ int HPI( line_t  l[] , int n ,point_t *poly ){
 		else  ++bot;
 	}
     l[top+1] = l[bot];
-    for (int i = bot;i <= top;++i){
+    for (int i = bot;i <= top;++i)
         poly[i-bot] = lineCrossline(l[i],l[i+1]);
-    }
-//	int nn = top-bot+1;
-//	l[nn] = l[0];
-//	for (int i = 0;i < nn;++i ){
-//        poly[i] = lineCrossline(l[i],l[i+1]);
-//	}
+
 	return top - bot + 1 ;
 }
 
@@ -633,23 +609,5 @@ circle_t CircumscribedCircle(point_t p1, point_t p2, point_t p3) {
 
 /// - - - - - - - - - - - - - - - - - - Code line - - - - - - - - - - - - - - - - - - - - - - - ///
 
-
-segment_t s[200];
-int n;
-int main() {
-//    freopen("in.txt", "r", stdin);
-//    freopen("out.txt", "w", stdout);
-//    scanf("%d",&t);
-    while(scanf("%d",&n) && n){
-//    while ( t-- ){
-//        scanf("%d",&n);
-        int ans = 0;
-        for (int i = 0;i < n;++i )scanf("%lf%lf%lf%lf",&s[i].s.x,&s[i].s.y,&s[i].e.x,&s[i].e.y);
-        for (int i = 0;i < n;++i )for (int j = i+1;j < n;++j )
-            if ( SegmentOnSegment(s[i],s[j]) )ans++;
-        Ans(ans);
-    }
-    return 0;
-}
 
 
