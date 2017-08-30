@@ -33,7 +33,7 @@ Cube _Multiply(Cube const&A,Cube const&B,llt mod){
     for (int j = 0;j < A.spec;++j){
         _tmpCube.mat[i][j] = 0;
         for (int k = 0;k < A.spec;++k){
-            _tmpCube.mat[i][j] += A.mat[i][k]*B.mat[k][j];
+            _tmpCube.mat[i][j] += A.mat[i][k]*B.mat[k][j]%MOD;
             _tmpCube.mat[i][j] %= mod;
         }
     }
