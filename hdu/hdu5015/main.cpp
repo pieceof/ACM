@@ -1,176 +1,104 @@
-#include <cstdio>
-#include <set>
-#include <algorithm>
-#include <cstring>
-#include <cmath>
-#include <iostream>
-#include <climits>
-#include <string>
-#include <map>
-#include <vector>
-#include <iomanip>
-#include <set>
-#include <queue>
-#define CLEAR(a) memset((a),0,sizeof(a))
-#define FLAG(a) memset((a) , -1 , sizeof(a))
-#define  varName(x) #x
-#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-#define  deBugPair(exp1,exp2) cout<< " == > " << "(" << #exp1<<" : "<< (exp1) << "," << #exp2 << " : " << (exp2) << ")" << endl
-#define Case printf("Case %d:\n",kase++)
-#define Ans(x) printf("%d\n",(x))
-#define readfile(path) freopen( (path) , "r", stdin )
-#define writefile(path) freopen( (path) , "w", stdout )
-using namespace std;
-///-------------------------   math ------------------------///
-typedef long long llt;
-const double eps = 1e-9;
-const double PI = acos(-1);
-inline double ln(double const&x ){ return log(x)/log(exp(1));}
-inline double Vfrustum( double const&r1,double const&r2,double const&h ){
-    return PI * h * ( r1*r1 + r2*r2 + r1*r2 )/3;
-}
+//////////////////////////////////////////////////////////
+//                       _oo0oo_                        //
+//                      o8888888o                       //
+//                      88" . "88                       //
+//                      (| -_- |)                       //
+//                      0\  =  /0                       //
+//                    ___/`---'\___                     //
+//                  .' \\|     |// '.                   //
+//                 / \\|||  :  |||// \                  //
+//                / _||||| -:- |||||- \                 //
+//               |   | \\\  -  /// |   |                //
+//               | \_|  ''\---/''  |_/ |                //
+//               \  .-\__  '-'  ___/-. /                //
+//             ___'. .'  /--.--\  `. .'___              //
+//          ."" '<  `.___\_<|>_/___.' >' "".            //
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |          //
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /          //
+//     =====`-.____`.___ \_____/___.-`___.-'=====       //
+//                       `=---='                        //
+//                                                      //
+//                                                      //
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      //
+//                                                      //
+//               ∑◊Ê±£””         ”¿ŒﬁBUG               //
+//////////////////////////////////////////////////////////
+
+#include "../../headers.h"
 
 
-///----------------------- debug tools ---------------------///
-
-template <typename T>
-void ArrayCin( T *a ,int n ,int pos = 0){
-    for (int i = pos;i < n;++i ) cin>>a[i];
-}
-
-template <typename T>
-void ArrayDisp(T *a,int n ){
-//    std::cout << varName(a) << "  : ";
-    cout << "===> : ";
-    for (int i = 0;i < n;++i )cout << std::right << setw(2)<<a[i]<<" ";cout << endl;
-}
-template <typename T>
-void ArrayDisp(T *a,int n,int m ,int twoLen){
-    for (int i = 0;i < n;++i ){
-        for (int j = 0;j < m;++j ){
-            cout << std::right << setw(2)<< *(a +i*twoLen +j) << " ";
-        }cout << endl;
-    }cout << endl;
-}
-///------------------- faster IO --------------------//
-
-namespace fastIo{
-    template <typename T>
-    inline bool scan_d (T &ret) {
-        char c;
-        int sgn;
-        if (c = getchar(), c == EOF) return 0; //EOF
-        while (c != '-' && (c < '0' || c > '9') ) {
-            if((c = getchar()) == EOF) return 0;
-        }
-        sgn = (c == '-') ? -1 : 1;
-        ret = (c == '-') ? 0 : (c - '0');
-        while (c = getchar(), c >= '0' && c <= '9') ret = ret * 10 + (c - '0');
-        ret *= sgn;
-        return 1;
-    }
-    template<typename T>
-    void print(T x) {
-        static char s[33], *s1; s1 = s;
-        if (!x) *s1++ = '0';
-        if (x < 0) putchar('-'), x = -x;
-        while(x) *s1++ = (x % 10 + '0'), x /= 10;
-        while(s1-- != s) putchar(*s1);
-    }
-    template<typename T>
-    void println(T x) {
-        print(x); putchar('\n');
-    }
-
-}
-
-/// ------------------------------ code line ------------------------------//
-
-
-
-const int MOD = 10000007;
-const int Cube_SIZE = 15;   //æÿ’Û¥Û–°
+const llt MOD = 10000007;
 struct Cube{
+//private:
+    enum {Cube_SIZE=110,mod=MOD};
+//    int mod;
+//public:
     int spec;
     llt mat[Cube_SIZE][Cube_SIZE];
-};
-//µ•Œªæÿ’Û
-Cube const _UnitCube = {15,
-{
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-}
-};
-///æÿ’Û≥À∑®
-Cube _Multiply(Cube const&A,Cube const&B,llt mod){
-    Cube _tmpCube;
-    _tmpCube.spec = A.spec;
-    for (int i = 0;i < A.spec;++i)
-    for (int j = 0;j < A.spec;++j){
-        _tmpCube.mat[i][j] = 0;
-        for (int k = 0;k < A.spec;++k){
-            _tmpCube.mat[i][j] += A.mat[i][k]*B.mat[k][j];
-            _tmpCube.mat[i][j] %= mod;
+    Cube(int s=0):spec(s){ init(); };
+    void init(int sp = -1 ){
+        CLEAR(mat);
+        if ( sp != -1 ) spec = sp;
+        for (int i = 0;i < spec;++i ) mat[i][i] = 1;
+    }
+    ///æÿ’Û≥À∑®
+    Cube operator * ( Cube const&B ){
+        Cube _tmpCube(spec);
+        for (int i = 0;i < spec;++i)for (int j = 0;j < spec;++j){
+            _tmpCube.mat[i][j] = 0;
+            for (int k = 0;k < spec;++k){
+                _tmpCube.mat[i][j] += mat[i][k]*B.mat[k][j]%mod;
+                _tmpCube.mat[i][j] %= mod;
+            }
         }
+        return _tmpCube;
     }
-    return _tmpCube;
-}
-///æÿ’ÛøÏÀŸ√›
-Cube power_Cube(Cube &A,llt n,llt mod)
-{
-    Cube _tmpCube = _UnitCube;
-    _tmpCube.spec = A.spec;
-    while(n){
-        if(n & 1)
-            _tmpCube = _Multiply(_tmpCube, A ,mod);
-        A = _Multiply(A, A, mod);
-        n >>= 1;
+    ///æÿ’ÛøÏÀŸ√›
+    Cube operator ^ (llt n){
+        Cube _tmpCube(spec);
+        Cube A = *this;
+        while(n){
+            if(n & 1)
+                _tmpCube = _tmpCube * A;
+            A = A * A;
+            n >>= 1;
+        }
+        return _tmpCube;
     }
-    return _tmpCube;
-}
+    void Disp(){
+        cout << endl;
+        for (int i = 0;i < spec;++i ){
+            for (int j = 0;j < spec;++j )
+                cout << std::right << setw(3) << mat[i][j];
+            cout << endl;
+        }cout << endl;
+    }
+};
+
 llt n,m;
-int nub[15] = {23};
+llt nub[15] = {23};
 int main(){
     Cube arr;
 //    int t;scanf("%d",&t);
     while ( scanf("%I64d%I64d",&n,&m) != EOF ){
-        for (int i = 1 ;i <= n;++i )
-            scanf("%d",nub+i);
+
+        for (int i = 1 ;i <= n;++i ) scanf("%d",nub+i);
         nub[0] = 23;
         nub[++n] = 3; n++;
+
+        arr.init(n);
         for (int i = 0;i < n-1;++i ){
             arr.mat[i][0] = 10;
-            for (int j = 1;j < n-1;++j ){
-                if ( j > i ) arr.mat[i][j] = 0;
-                else arr.mat[i][j] = 1;
-            }
+            for (int j = 1;j < n-1;++j )
+                arr.mat[i][j] = ( j > i ) ? 0 : 1;
             arr.mat[i][n-1] = 1;
         }
-        arr.spec = n;
-        for (int i = 0;i < n;++i )
-            arr.mat[n-1][i] = 0;
         arr.mat[n-1][n-1] = 1;
-//        ArrayDisp( (llt*)arr.mat,n,n,15);
-        arr = power_Cube(arr,m,MOD);
-//        ArrayDisp( (llt*)arr.mat,n,n,15);
+        arr = arr ^ m ;
         llt ans = 0;
-        for (int i = 0;i < n;++i  ){
-            ans += (nub[i]*arr.mat[n-2][i])%MOD;
-            ans %= MOD;
-        }
+        for (int i = 0;i < n;++i )
+            ans = (ans + (nub[i]*arr.mat[n-2][i])%MOD ) % MOD;
+
         printf("%lld\n",ans);
     }
     return 0;
