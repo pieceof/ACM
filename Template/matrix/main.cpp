@@ -9,8 +9,9 @@ struct Cube{
     int spec;
     llt mat[Cube_SIZE][Cube_SIZE];
     Cube(int s=0):spec(s){ init(); };
-    void init(){
+    void init(int sp = -1 ){
         CLEAR(mat);
+        if ( sp != -1 ) spec = sp;
         for (int i = 0;i < spec;++i ) mat[i][i] = 1;
     }
     ///矩阵乘法
