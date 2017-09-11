@@ -1,0 +1,612 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(n\right)$
+\end_inset
+
+
+\begin_inset Formula $=$
+\end_inset
+
+
+\begin_inset Formula $\frac{1}{\sqrt{5}}$
+\end_inset
+
+
+\begin_inset Formula $\left[\left(\frac{\left(1+\sqrt{5}\right)}{2}\right)^{n}+\left(\frac{\left(1-\sqrt{5}\right)}{2}\right)^{n}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x=\log_{10}^{fib(n)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x^{10}=fib\left(n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $g\left(i\right)=i*k+b$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(0\right)=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(1\right)=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(i\right)=fib\left(i-1\right)+fib\left(i-2\right)(n\geqq2)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sum_{i=0}^{n-1}fib\left(g\left(i\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sum\limits _{i=0}^{n-1}fib\left(g\left(i\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fib\left(g\left(i\right)\right)=\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]$
+\end_inset
+
+
+\begin_inset Formula $^{k*i+b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{b}+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k+b}+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k*2+b}+\ldots+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k*n+b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{b}*\left(\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{0}+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k}+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k*2}+\ldots+\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]^{k*n}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A=\left[\begin{array}{cc}
+1 & 1\\
+1 & 0
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A^{b}*\left(A^{0}+A^{k}+A^{k*2}+\ldots+A^{k*n}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S\left(n\right)=\left[\begin{array}{cc}
+E & E\\
+0 & A
+\end{array}\right]^{n}*\left[\begin{array}{c}
+0\\
+E
+\end{array}\right]=\left[\begin{array}{c}
+S\left(n\right)\\
+A^{n+1}
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $l\left(i\right)=\left[l^{'}\left(i-1\right)+l^{'}\left(i\right)\right]\%2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}1 & 0 & 0 & 1\\
+1 & 1 & 0 & 0\\
+0 & 1 & 1 & 0\\
+0 & 0 & 1 & 1
+\end{bmatrix}*\begin{bmatrix}l_{1}'\\
+l_{2}'\\
+l_{3}'\\
+l_{4}'
+\end{bmatrix}=\begin{bmatrix}l_{1}\\
+l_{2}\\
+l_{3}\\
+l_{4}
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $S\left(n\right)=A^{1}+A^{2}+\ldots+A^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}E & E\\
+0 & A
+\end{bmatrix}*\begin{bmatrix}S\left(n-1\right)\\
+A\left(n\right)
+\end{bmatrix}=\begin{bmatrix}S\left(n\right)\\
+A\left(n+1\right)
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{\left(0,0\right)}=233$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $a_{\left(i,j\right)}=a_{\left(i-1,j-1\right)}+a_{\left(i-1,j\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(i\neq0,j\neq0\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(n\leq10,m\leq10^{9}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}233 & 2333 & 23333 & 233333 & 2333333\\
+a_{\left(1,0\right)} & \left(a_{\left(1,0\right)}+2333\right) & \ldots & \ldots & \ldots\\
+a_{\left(2,0\right)} & \left(a_{\left(2,0\right)}+a_{\left(1,0\right)}+2333\right) & \ldots & \ldots & \ldots\\
+a_{\left(3,0\right)} & \left(a_{\left(3,0\right)}+a_{\left(2,0\right)}+a_{\left(1,0\right)}+2333\right) & \ldots & \ldots & \ldots\\
+a_{\left(4,0\right)} & \left(a_{\left(4,0\right)}+a_{\left(3,0\right)}+a_{\left(2,0\right)}+a_{\left(1,0\right)}+2333\right) & \ldots & \ldots & \ldots
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}10 & 1 & 1 & 1 & 1 & 1\\
+10 & 1 & 0 & 0 & 0 & 1\\
+10 & 1 & 1 & 0 & 0 & 1\\
+10 & 1 & 1 & 1 & 0 & 1\\
+10 & 1 & 1 & 1 & 1 & 1\\
+0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}^{m}*\begin{bmatrix}23\\
+a_{\left(1,0\right)}\\
+a_{\left(2,0\right)}\\
+a_{\left(3,0\right)}\\
+a_{\left(4,0\right)}\\
+3
+\end{bmatrix}=\begin{bmatrix}233333...\\
+a_{\left(1,m\right)}\\
+a_{\left(2,m\right)}\\
+a_{\left(3,m\right)}\\
+a_{\left(4,m\right)}\\
+a_{\left(5,m\right)}
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $M=C^{n*n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $M\%=MOD$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sum_{i=0}^{n}\sum_{j=0}^{n}M_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(A*B\right)*\left(A*B\right)*\ldots*\left(A*B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A*\left(B*A\right)*\left(B*A\right)*\ldots*B$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a^{n}+b^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q=a*b$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S\left(n\right)=a^{n}+b^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S\left(n+1\right)=p*S\left(n\right)+q*S\left(n-1\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S$
+\end_inset
+
+
+\begin_inset Formula $\left(n\right)=\left\lceil \left(a+\sqrt{b}\right)^{n}\right\rceil \%m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $0<a-\sqrt{b}<1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\left(a-\sqrt{b}\right)^{n}\rightarrow0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{n}=\left(a+\sqrt{b}\right)^{n},B_{n}=\left(a-\sqrt{b}\right)^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $C_{n}=A_{n}+B_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S_{n}=\left(C_{n}\right)\%m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $C_{n}*\left(\left(a+\sqrt{b}\right)+\left(a-\sqrt{b}\right)\right)=\left(a+\sqrt{b}\right)^{n+1}+\left(a-\sqrt{b}\right)^{n+1}+\left(a+\sqrt{b}\right)^{n}*\left(a-\sqrt{b}\right)+\left(a-\sqrt{b}\right)^{n}*\left(a+\sqrt{b}\right)=C_{n+1}+\left(a^{2}-b\right)*\left(a+\sqrt{b}\right)^{n-1}+\left(a^{2}-b\right)*\left(a-\sqrt{b}\right)^{n-1}=C_{n+1}+\left(a^{2}-b\right)*C_{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $C_{n+1}=2*a*C_{n}-\left(a^{2}-b\right)*C_{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}2a & -\left(a^{2}-b\right)\\
+1 & 0
+\end{bmatrix}^{n}*\begin{bmatrix}C_{1}\\
+C_{0}
+\end{bmatrix}=\begin{bmatrix}C_{n+1}\\
+C_{n-1}
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{i}\left(k\right)=F_{i}*i^{k},\left(i\geq1\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sum_{i=1}^{n}A_{i}\left(k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{i}\left(k\right)=\left(fib\left(i-1\right)+fib\left(i-2\right)\right)*i^{k}=fib\left(i-1\right)*i^{k}+fib\left(i-2\right)*i^{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $u\left(n,k\right)=fib\left(n-1\right)*n^{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $v\left(n,k\right)=fib\left(n-2\right)*n^{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $u\left(n+1,k\right)=fib\left(n\right)*(n+1)^{k}=\left(fib\left(n-1\right)+fib\left(n-2\right)\right)*\left(C_{k}^{0}*n^{0}+C_{k}^{1}*n^{1}+\ldots+C_{k}^{k}*n^{k}\right)=u\left(n,0\right)+\ldots+u\left(n,k\right)+v\left(n,1\right)+\ldots+v\left(n,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $v\left(n+1,k\right)=fib\left(n-1\right)*\left(n+1\right)^{k}=u\left(n,0\right)+\ldots+u\left(n,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{bmatrix}C_{1,0} & 0 & C_{1,0} & 0 & 0\\
+C_{1,0} & C_{1,1} & C_{1,0} & C_{1,1} & 0\\
+C_{1,0} & 0 & 0 & 0 & 0\\
+C_{1,0} & C_{1,1} & 0 & 0 & 0\\
+0 & 1 & 0 & 1 & 1
+\end{bmatrix}*\begin{bmatrix}u\left(n,0\right)\\
+u\left(n,1\right)\\
+v\left(n,0\right)\\
+v\left(n,1\right)\\
+S\left(n-1\right)
+\end{bmatrix}=\begin{bmatrix}u\left(n+1,0\right)\\
+u\left(n+1,1\right)\\
+v\left(n+1,0\right)\\
+v\left(n+1,1\right)\\
+S\left(n\right)
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O\left(nlog\left(n\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
