@@ -2,6 +2,7 @@
 *.cbp
 *.depend
 *.layout
+**/bin/Debug/
 
 # test files
 tmp/
