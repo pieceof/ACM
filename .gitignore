@@ -5,7 +5,11 @@
 **/bin/Debug/
 
 # test files
-tmp/
+tmp/**/*.txt
+!tmp/**/*.cbp
+!tmp/**/*.depend
+!tmp/**/*.layout
+
 
 # Prerequisites
 *.d
