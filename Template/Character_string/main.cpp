@@ -1,27 +1,4 @@
-#include <iostream>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <algorithm>
-#include <set>
-#include <map>
-#include <vector>
-#include <stack>
-#include <assert.h>
-#include <climits>
-#define CLEAR(a) memset((a),0,sizeof(a))
-#define FLAG(a) memset((a) , -1 , sizeof(a))
-#define  varName(x) #x
-#define  deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-#define Case printf("Case %d: ",kase++)
-#define Ans(x) printf("%d\n",(x))
-#define readfile(path) freopen( (path) , "r", stdin )
-#define writefile(path) freopen( (path) , "w", stdout )
-
-typedef long long llt;
-using namespace std;
-
+#include "../../headers.h"
 
 int const SIZE = 305000;
 
