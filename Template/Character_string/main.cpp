@@ -2,49 +2,6 @@
 
 int const SIZE = 305000;
 
-void dispArray( int const a[],int n ) {
-//    printf("this array is  ==  > ");
-    if( n < 1) puts("");
-    printf("%4d",a[0]);
-    for (int i = 1 ; i < n; ++i )printf("%3d",a[i]);
-    puts("");
-}
-
-/*
-struct node_t {
-    node_t* child[30];//26个儿子
-//	int idx;//对应解释的序号
-    bool suffix;//是否为后缀
-    int cnt;
-} Node[SIZE];
-int toUsed = 1;
-
-//插入单词
-void insert(char const word[] ) {
-    node_t* loc = Node;
-    for(int i = 0; word[i]; ++i) {
-        loc->cnt++;
-        int sn = word[i] - 'a';
-        if ( !loc->child[sn] ) loc->child[sn] = Node + toUsed ++;
-        loc = loc->child[sn];
-    }
-    loc->cnt++;
-//    loc->suffix = 1;
-}
-//查找单词,返回出现的次数
-int find(char const word[]) {
-    node_t* loc = Node;
-    for(int i = 0; word[i] ; ++i) {
-//        if ( loc->suffix ) return 1;
-        int sn = word[i] - 'a';
-        if ( !loc->child[sn] ) return 0;
-        loc = loc->child[sn];
-    }
-    return loc->cnt;
-}
-//*/
-
-
 template<class DATA>
 void getNext( DATA const P[],int *Next,int n ) {
     Next[0] = 0;
