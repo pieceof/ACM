@@ -10,6 +10,11 @@ tmp/**/*.txt
 !tmp/**/*.depend
 !tmp/**/*.layout
 
+# clion files
+cmake-build-debug/
+.idea
+
+
 
 # Prerequisites
 *.d
