@@ -51,6 +51,10 @@ using namespace std;
 typedef long long llt;
 double const PI = acos(-1.0);
 
+template <typename T>
+T gcd(T a,T b){  return b==0?a:gcd(b,a%b); }
+
+
 ///-------------------------   math ------------------------///
 
 inline double ln(double const&x ){ return log(x)/log(exp(1.0));}
