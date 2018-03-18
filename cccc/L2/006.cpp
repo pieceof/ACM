@@ -22,7 +22,7 @@ bool isRight(int x, int p) {
     return ix > ip;
 }
 
-//  l r 是a的下标, fa 是 node 的下标
+//  l , r 是a的下标, fa 是 node 的下标
 void DFS(int l, int r, int fa) {
     if (l > r) return;
     if (isRight(a[r], node[fa])) node[rson(fa)] = a[r];
