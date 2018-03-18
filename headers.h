@@ -42,7 +42,7 @@
 #define FLAG(a) memset((a),-1,sizeof(a))
 #define varName(x) #x
 #define deBug(exp) cout<< " == > " << #exp<<" : "<< (exp) << endl
-#define deBugPair(exp1,exp2) cout<< " == > " << "(" << #exp1<<" : "<< (exp1) << "," << #exp2 << " : " << (exp2) << ")" << endl
+#define deBugp(exp1,exp2) cout<< " == > " << "(" << #exp1<<" : "<< (exp1) << "," << #exp2 << " : " << (exp2) << ")" << endl
 #define Case   printf("Case %d:\n",kase++)
 #define Ans(x) printf("%d\n",(x))
 #define readfile(path)  freopen( (path) , "r", stdin )
