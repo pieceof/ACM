@@ -4,11 +4,8 @@
 *.layout
 **/bin/Debug/
 
-# test files
-tmp/**/*.txt
-!tmp/**/*.cbp
-!tmp/**/*.depend
-!tmp/**/*.layout
+# temp files
+tmp/
 
 # clion files
 cmake-build-debug/
