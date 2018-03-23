@@ -6,6 +6,8 @@
 
 # temp files
 tmp/
+/in.txt
+/out.txt
 
 # clion files
 cmake-build-debug/
