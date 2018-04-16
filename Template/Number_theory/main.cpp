@@ -159,6 +159,7 @@ void sieve_pri(){
     }
 }
 /**< 直接求欧拉函数 */
+// 这个有问题
 int euler_phi(int n){
     int m = floor(sqrt(n+0.5));
     int ans = n;
@@ -168,6 +169,19 @@ int euler_phi(int n){
     }
     if(n > 1) ans = ans / n *(n-1);
     return ans;
+}
+// 这个对的
+llt getphi(llt x) {
+    llt tmp = x;
+    for (int i = 2; i * i <= x; i++) {
+        if (x % i == 0) {
+            while (x % i == 0) x /= i;
+            tmp /= i;
+            tmp *= (i - 1);
+        }
+    }
+    if (x > 1) tmp = tmp / x * (x - 1);
+    return tmp;
 }
 
 /**< 筛法求欧拉函数 */
